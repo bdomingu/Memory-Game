@@ -26,21 +26,25 @@ function App() {
       .sort(() => Math.random() - 0.5)
       .map((card) => ({...card, id: Math.random()}))
 
+    setChoiceOne(null)
+    setChoiceTwo(null)
     setCards(shuffledCards)
     setTurns(0)
   }
 
 // handle a choice
 const handleChoice = (card) => {
+  console.log(choiceOne?.id)
+  if (card.id === choiceOne?.id) return;
   choiceOne ? setChoiceTwo(card) : setChoiceOne(card)
   
 }
 
 //compare the two selected cards
 useEffect (() => {
-  setDisabled(true)
+  
   if (choiceOne && choiceTwo) {
-
+      setDisabled(true)
     if (choiceOne.src === choiceTwo.src) {
       setCards(prevCards => {
         return prevCards.map(card => {
@@ -61,6 +65,10 @@ useEffect (() => {
 }, [choiceOne, choiceTwo])
 
 console.log(cards)
+
+useEffect (() => {
+  shuffleCards()
+}, [])
 
 const resetTurn = () => {
   setChoiceOne(null)
@@ -86,7 +94,7 @@ const resetTurn = () => {
         ))}
 
       </div>
-  
+      <p>Turns:{turns}</p>
     </div>
   );
 }
