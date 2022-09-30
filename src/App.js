@@ -4,12 +4,12 @@ import SingleCard from './components/SingleCard.js'
 
 
 const cardImages = [
-  {"src": "/images/img1.jpg"},
-  {"src": "/images/img2.jpg"},
-  {"src": "/images/img3.jpg"},
-  {"src": "/images/img4.jpeg"},
-  {"src": "/images/img5.jpg"},
-  {"src": "/images/img6.jpg"}
+  {"src": "/images/img1.jpg", matched: false},
+  {"src": "/images/img2.jpg", matched: false},
+  {"src": "/images/img3.jpg", matched: false},
+  {"src": "/images/img4.jpeg", matched: false},
+  {"src": "/images/img5.jpg", matched: false},
+  {"src": "/images/img6.jpg", matched: false}
 ]
 
 
@@ -18,6 +18,7 @@ function App() {
   const [turns, setTurns] = useState(0)
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
+  const [disabled, setDisabled] = useState(false)
 
   // shuffle the cards 
   const shuffleCards = () => {
@@ -37,23 +38,35 @@ const handleChoice = (card) => {
 
 //compare the two selected cards
 useEffect (() => {
+  setDisabled(true)
   if (choiceOne && choiceTwo) {
 
     if (choiceOne.src === choiceTwo.src) {
-      console.log("the cards match")
+      setCards(prevCards => {
+        return prevCards.map(card => {
+          if (card.src === choiceOne.src) {
+            return {...card, matched:true}
+          } else {
+            return card
+          }
+        })
+      })
       resetTurn()
     } else{
-      console.log("the cards do not match")
+      
+      setTimeout(() => resetTurn(), 1000)
     }
   }
 
 }, [choiceOne, choiceTwo])
 
+console.log(cards)
 
 const resetTurn = () => {
   setChoiceOne(null)
   setChoiceTwo(null)
   setTurns(prevTurns => prevTurns + 1)
+  setDisabled(false)
 }
    
   return (
@@ -67,6 +80,8 @@ const resetTurn = () => {
         key={card.id} 
         card={card}
         handleChoice={handleChoice}
+        flipped = {card === choiceOne || card === choiceTwo || card.matched}
+        disabled = {disabled}
         />
         ))}
 

@@ -2,7 +2,7 @@ import React from 'react'
 import './SingleCard.css'
 
 
-function SingleCard({ card, handleChoice }) {
+function SingleCard({ card, handleChoice, flipped }) {
   
   const handleClick = () => {
     handleChoice(card)
@@ -10,7 +10,7 @@ function SingleCard({ card, handleChoice }) {
 
   return (
   <div className="card">
-    <div>
+    <div className={flipped ? "flipped" : ""}>
       <img className='front' src={card.src} alt="front card" />
       <img 
       className='back' 
